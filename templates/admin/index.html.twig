@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row content">
+
+            {% include('admin/adminNavBar.html.twig') %}
+
+            <div class="container">
+                {{ form_start(form) }}
+                <div class="form-row">
+                    <div class="col">
+                        {{ form_widget(form.findByName, {'attr': {'placeholder': 'rechercher les utilisateurs par leur Email'}}) }}
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" >find</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prenom</th>
+                    <th scope="col">mail</th>
+                    <th scope="col">Code postal</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in users %}
+                    <tr class="table-success">
+                        <th scope="row">{{user.name}}</th>
+                        <td>{{ user.firtsName}}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.zipCode }}</td>
+                        <td><a href="{{ path('user_edit',{'id':user.id}) }} " class="btn btn-primary">Voir</a>
+                            <a href="{{path('user_delete',{'id':user.id})}}" class="btn btn-danger">X</a> </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
+
+

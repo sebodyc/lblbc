@@ -1,0 +1,54 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        <div class="row content">
+
+
+
+            {% include('admin/adminNavBar.html.twig') %}
+            <div class="container">
+                {{ form_start(form) }}
+                <div class="form-row">
+                    <div class="col">
+                        {{ form_widget(form.findByName, {'attr': {'placeholder': 'rechercher par titre'}}) }}
+                    </div>
+                    <div class="col">
+                        <button class="btn btn-primary" >find</button>
+                    </div>
+                </div>
+                {{ form_end(form) }}
+
+            </div>
+
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">Titre</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Code Postal</th>
+                    <th scope="col"></th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr class="table-success">
+                        <th scope="row">{{ product.title }}</th>
+                        <td>{{ product.user.email }}</td>
+                        <td>{{ product.zipCode }}</td>
+{#                        <td><a href="{{ path('product_show',{'id':product.id}) }} " class="btn btn-success">Voir</a>#}
+{#                            <a href="{{path('product_delete',{'id':product.id})}}" class="btn btn-danger">X</a> </td>#}
+{#                    </tr>#}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

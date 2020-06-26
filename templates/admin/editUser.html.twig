@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProductController!
+{% endblock %}
+
+{% block body %}
+
+
+    <div class="col-md-8">
+
+        <h1>create</h1>
+        {{ form_start(userForm) }}
+        {{ form_widget(userForm) }}
+        <button type="submit" class="btn btn-success">enregister les modif</button>
+        {{ form_end(userForm) }}
+
+
+    </div>
+{% endblock %}
