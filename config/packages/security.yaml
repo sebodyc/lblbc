@@ -28,6 +28,14 @@ security:
             anonymous: true
             lazy: true
             provider: app_user_provider
+            form_login:
+                login_path: security_login
+                check_path: security_login
+
+            logout:
+                path: security_logout
+
+
 
         api:
             pattern:   ^/api
@@ -49,5 +57,5 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
 
-        # - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/admin, roles: ROLE_ADMIN }
         # - { path: ^/profile, roles: ROLE_USER }

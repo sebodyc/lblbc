@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\AdminSearch;
 use App\Entity\AdminSearchUser;
+use App\Entity\Products;
 use App\Entity\User;
 use App\Form\AdminSearchType;
 use App\Form\AdminSearchUserType;
@@ -102,6 +103,18 @@ class AdminController extends AbstractController
         $em->remove($user);
         $em->flush();
         return $this->redirectToRoute('admin_console');
+    }
+
+    /**
+     * @Route("/admin/delete/product/{id<\d+>}", name="Product_delete")
+     * @param Products $products
+     * @param EntityManagerInterface $em
+     * @return RedirectResponse
+     */
+    public function deleteProduct(Products $products, EntityManagerInterface $em ){
+        $em->remove($products);
+        $em->flush();
+        return $this->redirectToRoute('admin_products');
     }
 
 

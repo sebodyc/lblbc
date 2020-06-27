@@ -54,7 +54,7 @@ class User implements UserInterface
     private $adress;
 
     /**
-     * @ORM\OneToMany(targetEntity=Products::class, mappedBy="User")
+     * @ORM\OneToMany(targetEntity=Products::class, mappedBy="User",cascade={"remove"}, orphanRemoval=true)
      */
     private $products;
 
@@ -64,7 +64,7 @@ class User implements UserInterface
     private $zipCode;
 
     /**
-     * @ORM\OneToMany(targetEntity=InBox::class, mappedBy="destinataire")
+     * @ORM\OneToMany(targetEntity=InBox::class, mappedBy="destinataire",cascade={"remove"}, orphanRemoval=true)
      */
     private $inBoxes;
 

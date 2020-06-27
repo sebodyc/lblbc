@@ -42,9 +42,9 @@
                         <th scope="row">{{ product.title }}</th>
                         <td>{{ product.user.email }}</td>
                         <td>{{ product.zipCode }}</td>
-{#                        <td><a href="{{ path('product_show',{'id':product.id}) }} " class="btn btn-success">Voir</a>#}
-{#                            <a href="{{path('product_delete',{'id':product.id})}}" class="btn btn-danger">X</a> </td>#}
-{#                    </tr>#}
+                        <td>
+                            <a href="{{path('Product_delete',{'id':product.id})}}" class="btn btn-danger">X</a> </td>
+                    </tr>
                 {% endfor %}
                 </tbody>
             </table>

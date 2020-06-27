@@ -35,7 +35,7 @@ class AppFixtures extends AbstractFixture
         });
         //creation des product
         $this->createMany(Products::class,60 ,function(Products $products){
-            $products->setTitle($this->faker->title)
+            $products->setTitle($this->faker->sentence($nbWords = 6, $variableNbWords = true) )
                      ->setDescription($this->faker->paragraph())
                      ->setZipCode(13100)
                      ->setPrice($this->faker->randomNumber(2))
