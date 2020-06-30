@@ -44,6 +44,7 @@ abstract class AbstractFixture extends Fixture
 
         // Chargement des données
         $this->loadData($manager);
+        $this->manager->flush();
     }
 
     /**
@@ -125,9 +126,9 @@ abstract class AbstractFixture extends Fixture
             // On persiste
             $this->manager->persist($object);
             // On ajoute la référence
-            $this->addReference($className . '_' . $i, $object);
+            $this->addReference($className . '_' .( $i + mt_rand(1,mt_getrandmax())), $object);
         }
         // On flush !
-        $this->manager->flush();
+//        $this->manager->flush();
     }
 }

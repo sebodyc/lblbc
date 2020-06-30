@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use App\Entity\Conversation;
 use App\Entity\InBox;
+use App\Entity\Message;
 use App\Entity\Products;
 use App\Entity\User;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -36,10 +38,26 @@ class AppFixtures extends AbstractFixture
         //creation des product
         $this->createMany(Products::class,60 ,function(Products $products){
             $products->setTitle($this->faker->sentence($nbWords = 6, $variableNbWords = true) )
-                     ->setDescription($this->faker->paragraph())
+                     ->setDescription($this->faker->paragraph(6))
                      ->setZipCode(13100)
+                     ->setType("vente")
                      ->setPrice($this->faker->randomNumber(2))
                      ->setUser($this->getRandomReference(User::class));
+            $this->createMany(Conversation::class,mt_rand(1,2), function (Conversation $conversation) use ($products){
+                $buyer= $this->getRandomReference(User::class);
+                $conversation->setBuyer($buyer)
+                    ->setCreatedAt($this->faker->dateTimeBetween("-6 months"))
+                    ->setUpdatedAt($this->faker->dateTimeBetween("-2 months"))
+                    ->setProduct($products);
+                $this->createMany(Message::class,mt_rand(3,4), function (Message $message) use ($buyer,$conversation,$products){
+                    $message->setContent($this->faker->sentence)
+                        ->setCreatedAt($this->faker->dateTimeBetween("-6 months"))
+                        ->setConversation($conversation)
+                        ->setSender($this->faker->boolean ? $buyer : $products->getUser());
+                });
+
+            });
+
         });
         //creation des Inbox
         $this->createMany(InBox::class,20,function(InBox $inBox){

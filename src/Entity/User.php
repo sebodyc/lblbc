@@ -8,10 +8,15 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
+ * @ApiResource(normalizationContext={"groups"={"user"}})
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ *
+ *
+ *
+ *
  */
 class User implements UserInterface
 {
@@ -19,18 +24,20 @@ class User implements UserInterface
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
+     *
+     * @Groups({"product","conversation:read"})
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $email;
+    private ?string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
@@ -40,38 +47,57 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     *
+     * @Groups({"user","conversation:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"user","conversation:read"})
      */
     private $firtsName;
 
     /**
      * @ORM\Column(type="string", length=255)
+     *  @Groups({"user"})
      */
     private $adress;
 
     /**
      * @ORM\OneToMany(targetEntity=Products::class, mappedBy="User",cascade={"remove"}, orphanRemoval=true)
+     *  @Groups({"user"})
      */
     private $products;
 
     /**
      * @ORM\Column(type="integer")
+     *  @Groups({"user"})
      */
     private $zipCode;
 
     /**
      * @ORM\OneToMany(targetEntity=InBox::class, mappedBy="destinataire",cascade={"remove"}, orphanRemoval=true)
+     *  @Groups({"user"})
      */
     private $inBoxes;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Conversation::class, mappedBy="buyer")
+     */
+    private $conversations;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Message::class, mappedBy="sender")
+     */
+    private $messages;
 
     public function __construct()
     {
         $this->products = new ArrayCollection();
         $this->inBoxes = new ArrayCollection();
+        $this->conversations = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -256,6 +282,68 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($inBox->getDestinataire() === $this) {
                 $inBox->setDestinataire(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Conversation[]
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): self
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations[] = $conversation;
+            $conversation->setBuyer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): self
+    {
+        if ($this->conversations->contains($conversation)) {
+            $this->conversations->removeElement($conversation);
+            // set the owning side to null (unless already changed)
+            if ($conversation->getBuyer() === $this) {
+                $conversation->setBuyer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Message[]
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): self
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages[] = $message;
+            $message->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): self
+    {
+        if ($this->messages->contains($message)) {
+            $this->messages->removeElement($message);
+            // set the owning side to null (unless already changed)
+            if ($message->getSender() === $this) {
+                $message->setSender(null);
             }
         }
 

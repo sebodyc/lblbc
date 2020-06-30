@@ -32,3 +32,19 @@ services:
                 entity: App\Entity\User,
                 event: prePersist,
             }
+
+    App\Doctrine\Listener\ProductListener:
+        tags:
+            - {
+                name: doctrine.orm.entity_listener,
+                entity: App\Entity\Products,
+                event: prePersist,
+            }
+
+    App\Doctrine\Listener\MessageListener:
+        tags:
+            - {
+                name: doctrine.orm.entity_listener,
+                entity: App\Entity\Message,
+                event: prePersist,
+            }
