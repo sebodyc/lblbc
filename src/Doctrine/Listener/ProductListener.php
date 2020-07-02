@@ -25,7 +25,8 @@ class ProductListener
         if ($products->getUser()) {
             return;
         }
-            $products->setUser($this->security->getUser());
+        $user=$this->security->getUser();
+            $products->setUser($user);
 
     }
 

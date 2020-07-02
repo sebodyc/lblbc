@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiFilter;
+use App\Controller\CreateProductWithImageController;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Annotation\ApiSubresource;
 use App\Repository\ProductsRepository;
@@ -11,20 +12,32 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+
 
 /**
  * @ORM\Entity(repositoryClass=ProductsRepository::class)
- * @ApiResource(normalizationContext={"groups"={"product"}})
+ * @ApiResource(normalizationContext={"groups"={"product"}} ,
+ *      collectionOperations={
+ *       "get",
+ *     "post"={
+ *             "controller"=CreateProductWithImageController::class,
+ *             "deserialize"=false}
+ *     })
+ * @Vich\Uploadable()
+ * @ApiFilter(SearchFilter::class, properties={"id": "exact", "ZipCode": "exact"})
+ *
  *
  */
 class Products
 {
     /**
      * @ORM\Id()
-     * @ApiFilter(SearchFilter::class, properties={"id": "exact", "ZipCode": "exact", "ZipCode": "start"})
+     *
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      * @Groups({"product","user" , "conversation:read"})
+     *
      *
      */
     private $id;
@@ -50,7 +63,7 @@ class Products
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="products")
-     * @Groups({"product"})
+     * @Groups({"product","conversation:read"})
      *
      */
     private $User;
@@ -72,6 +85,34 @@ class Products
      * @ApiSubresource()
      */
     private $conversations;
+
+    /**
+     * @Vich\UploadableField(mapping="products", fileNameProperty="productImage")
+     */
+    private $productImageFile;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @Groups("product")
+     */
+    private $productImage;
+
+    /**
+     * @return mixed
+     */
+    public function getProductImageFile()
+    {
+        return $this->productImageFile;
+    }
+
+    /**
+     * @param mixed $productImageFile
+     */
+    public function setProductImageFile($productImageFile): void
+    {
+        $this->productImageFile = $productImageFile;
+    }
+
 
     public function __construct()
     {
@@ -191,6 +232,18 @@ class Products
                 $conversation->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getProductImage(): ?string
+    {
+        return $this->productImage;
+    }
+
+    public function setProductImage(?string $productImage): self
+    {
+        $this->productImage = $productImage;
 
         return $this;
     }

@@ -29,7 +29,7 @@ class Conversation
      * @ORM\ManyToOne(targetEntity=Products::class, inversedBy="conversations")
      * @Groups("conversation:read")
      */
-    private $product;
+    private ?Products $product;
 
     /**
      * @ORM\Column(type="datetime")
