@@ -25,8 +25,10 @@ class AppFixtures extends AbstractFixture
 
     public function loadData(ObjectManager $manager)
     {
+        $regions= ["Paca", "Corse", "langedoc-rousillon", "haut-de-france", "bretagne"];
+
         //creation des utilsateurs
-        $this->createMany(User::class, 10,function (User $user,$u){
+        $this->createMany(User::class, 5,function (User $user,$u){
             $user->setName($this->faker->lastName)
                  ->setFirtsName($this->faker->lastName)
                  ->setRoles(array('ROLE_USER'))
@@ -36,10 +38,11 @@ class AppFixtures extends AbstractFixture
                  ->setPassword("password");
         });
         //creation des product
-        $this->createMany(Products::class,60 ,function(Products $products){
+        $this->createMany(Products::class,30 ,function(Products $products) use ($regions){
             $products->setTitle($this->faker->sentence($nbWords = 6, $variableNbWords = true) )
                      ->setDescription($this->faker->paragraph(6))
                      ->setZipCode(13100)
+                ->setRegion($this->faker->randomElement($regions))
                      ->setType("vente")
                      ->setPrice($this->faker->randomNumber(2))
                      ->setUser($this->getRandomReference(User::class));
@@ -60,7 +63,7 @@ class AppFixtures extends AbstractFixture
 
         });
         //creation des Inbox
-        $this->createMany(InBox::class,20,function(InBox $inBox){
+        $this->createMany(InBox::class,10,function(InBox $inBox){
             $inBox->setTitle($this->faker->title)
                     ->setMessage($this->faker->paragraph)
                     ->setProductUserId($this->faker->randomDigit)

@@ -48,13 +48,13 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="string", length=255)
      *
-     * @Groups({"user","conversation:read"})
+     * @Groups({"user","conversation:read","product","message:read"})
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     *  @Groups({"user","conversation:read"})
+     *  @Groups({"user","conversation:read","product"})
      */
     private $firtsName;
 

@@ -100,6 +100,25 @@ class AdminController extends AbstractController
      */
     public function deleteUser(User $user, EntityManagerInterface $em)
     {
+//        $conversation= $user->getConversations();
+//        foreach ($conversation as $c){
+//
+//            $messages= $c->getMessages();
+//            foreach ($messages as $m){
+//                $em->remove($m);
+//            }
+//            $em->remove($c);
+//        }
+//
+//
+//        $em->remove($user);
+//        $em->flush();
+//        return $this->redirectToRoute('admin_console');
+
+
+
+
+
         $em->remove($user);
         $em->flush();
         return $this->redirectToRoute('admin_console');

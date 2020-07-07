@@ -33,6 +33,7 @@ class MessageListener
     }
 
     public  function  prePersist( Message $message){
+
         if(!$message->getCreatedAt()){
             $message->setCreatedAt(new \DateTime());
         }

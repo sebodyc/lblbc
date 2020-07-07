@@ -20,12 +20,12 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
  * @ApiResource(normalizationContext={"groups"={"product"}} ,
  *      collectionOperations={
  *       "get",
- *     "post"={
+ *       "post"={
  *             "controller"=CreateProductWithImageController::class,
  *             "deserialize"=false}
  *     })
  * @Vich\Uploadable()
- * @ApiFilter(SearchFilter::class, properties={"id": "exact", "ZipCode": "exact"})
+ * @ApiFilter(SearchFilter::class, properties={"id": "exact", "ZipCode": "exact" , "region": "exact"})
  *
  *
  */
@@ -36,7 +36,7 @@ class Products
      *
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
-     * @Groups({"product","user" , "conversation:read"})
+     * @Groups({"product","user" , "conversation:read","message:write"})
      *
      *
      */
@@ -87,6 +87,13 @@ class Products
     private $conversations;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     *@Groups({"product"})
+     *
+     */
+    private $region;
+
+    /**
      * @Vich\UploadableField(mapping="products", fileNameProperty="productImage")
      */
     private $productImageFile;
@@ -96,6 +103,7 @@ class Products
      * @Groups("product")
      */
     private $productImage;
+
 
     /**
      * @return mixed
@@ -244,6 +252,18 @@ class Products
     public function setProductImage(?string $productImage): self
     {
         $this->productImage = $productImage;
+
+        return $this;
+    }
+
+    public function getRegion(): ?string
+    {
+        return $this->region;
+    }
+
+    public function setRegion(string $region): self
+    {
+        $this->region = $region;
 
         return $this;
     }

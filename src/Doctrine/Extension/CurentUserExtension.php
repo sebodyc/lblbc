@@ -36,8 +36,7 @@ class CurentUserExtension implements QueryCollectionExtensionInterface , QueryIt
             $alias= $queryNameGenerator->generateJoinAlias('product');
             $rootAlias = $queryBuilder->getRootAliases()[0];
             $queryBuilder->join($rootAlias. '.product' , $alias)
-                ->andWhere($rootAlias . '.buyer = :buyer')
-                ->orWhere($alias . '.User = :buyer')
+                ->andWhere("($rootAlias.buyer= :buyer or $alias.User =:buyer)")
                 ->setParameter('buyer', $this->security->getUser());
         }
 
@@ -54,8 +53,10 @@ class CurentUserExtension implements QueryCollectionExtensionInterface , QueryIt
     {
 
         if ($resourceClass === Conversation::class){
-            $rootAlias = $queryBuilder->getRootAlias()[0];
-            $queryBuilder->andWhere($rootAlias . '.buyer = :buyer')
+            $alias= $queryNameGenerator->generateJoinAlias('product');
+            $rootAlias = $queryBuilder->getRootAliases()[0];
+            $queryBuilder->join($rootAlias. '.product' , $alias)
+                ->andWhere("($rootAlias.buyer= :buyer or $alias.User =:buyer)")
                 ->setParameter('buyer', $this->security->getUser());
         }
     }

@@ -25,7 +25,14 @@ class SecurityController extends AbstractController
     }
 
     /**
-     * @Route("/" , name="security_login")
+     * @Route("/" , name="tot")
+     */
+    public function toto(){
+        return $this->redirectToRoute("admin_console");
+    }
+
+    /**
+     * @Route("/login" , name="security_login")
      * @param Security $security
      * @return Response
      */

@@ -12,7 +12,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=ConversationRepository::class)
- * @ApiResource(normalizationContext={"groups"= "conversation:read"})
+ * @ApiResource(normalizationContext={"groups"= "conversation:read"}
+ *
+ *     )
  */
 class Conversation
 {
@@ -52,7 +54,7 @@ class Conversation
     /**
      * @ORM\OneToMany(targetEntity=Message::class, mappedBy="conversation")
      * @ApiSubresource()
-     * @Groups("conversation:read")
+     * @Groups({"conversation:read","conversation:write"})
      * @ORM\OrderBy({"createdAt" : "DESC"})
      */
     private $messages;

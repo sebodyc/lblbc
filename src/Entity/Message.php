@@ -9,7 +9,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=MessageRepository::class)
- * @ApiResource(denormalizationContext={"groups" = "message:write"})
+ * @ApiResource(
+ *     denormalizationContext={"groups" = "message:write"},
+ *      normalizationContext={"groups" = "message:read"})
  */
 class Message
 {
@@ -23,26 +25,26 @@ class Message
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"message:write","conversation:read"})
+     * @Groups({"message:write","conversation:read", "message:read"})
      *
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"conversation:read"})
+     * @Groups({"conversation:read", "message:read"})
      */
     private $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Conversation::class, inversedBy="messages")
-     * @Groups({"message:write"})
+     * @Groups({"message:write","message:read"})
      */
     private $conversation;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="messages")
-     * @Groups({"conversation:read"})
+     * @Groups({"conversation:read","message:read"})
      */
     private $sender;
     /**
